@@ -36,7 +36,8 @@
         defaults: {
             teslaConfig: {value: "", type: "tesla-config"},
             command: {value: "", required: false},
-            name: {value: ""}
+            name: {value: ""},
+            autoWakeup: {value: true}
         },
         inputs: 1,
         outputs: 1,
@@ -114,7 +115,10 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-
+    <div class="form-row">
+        <label for="node-input-autowakeup"><i class="icon-tag"></i> Auto Wake Up</label>
+        <input type="checkbox" id="node-input-autowakeup">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="tesla-api">

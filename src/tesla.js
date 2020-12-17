@@ -150,6 +150,7 @@ module.exports = function (RED) {
                 const command = msg.command || config.command;
                 const {email, password} = node.teslaConfig.credentials;
                 const { commandArgs } = msg;
+                const autoWakeUp = msg.autoWakeUp || config.autoWakeUp;
                 if (command === 'remoteStart') {
                     commandArgs.password = password;
                 }
@@ -161,7 +162,7 @@ module.exports = function (RED) {
                     } else if (command === 'vehicle') {
                         msg.payload = await tjs.vehicleAsync({authToken, vehicleID});
                     } else {
-                        msg.payload = await doCommandAndAutoWake(command, authToken, vehicleID, true, commandArgs);
+                        msg.payload = await doCommandAndAutoWake(command, authToken, vehicleID, autoWakeUp, commandArgs);
                     }
 
                     send(msg);
