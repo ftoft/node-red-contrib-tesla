@@ -45,6 +45,16 @@ module.exports = function (RED) {
         }
     };
 
+    function getPrettyDate() {
+        return new Date().toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour12: false,
+            hour: 'numeric',
+            minute: 'numeric',
+        });
+    }
+
     const doCommandAndAutoWake = async (command, authToken, vehicleID, autoWakeUp, commandArgs) => {
         if (autoWakeUp) {
             const vehicleData = await tjs.vehicleAsync({authToken, vehicleID});
@@ -153,7 +163,7 @@ module.exports = function (RED) {
                 if (command === 'remoteStart') {
                     commandArgs.password = password;
                 }
-
+                node.status({fill:"yellow",shape:"ring",text:"Sending " + command + " command at: " + getPrettyDate()});
                 try {
                     const authToken = await getToken(email, password);
                     if (command === 'vehicles') {
@@ -164,8 +174,10 @@ module.exports = function (RED) {
                         msg.payload = await doCommandAndAutoWake(command, authToken, vehicleID, true, commandArgs);
                     }
 
+                    node.status({fill:"green",shape:"dot",text:command + " command send at: " + getPrettyDate()});
                     send(msg);
                 } catch (err) {
+                    node.status({fill:"red",shape:"dot",text:"Failed to send " + command + " command at: " + getPrettyDate()});
                     if (done) {
                         // Node-RED 1.0 compatible
                         done(err);
